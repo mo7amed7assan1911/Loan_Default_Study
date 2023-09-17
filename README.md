@@ -41,6 +41,8 @@ We built a predictive model to assess the risk of loan default based on the insi
 ## Key Findings
 
 📊 **Client Demographics:**
+![image](https://github.com/mo7amed7assan1911/Loan_Default_Study/assets/55090589/292d3ad1-cc36-4206-ab3e-f6300783ffc9)
+
 - Age follows a relatively normal distribution.
 - Most applicants have finished secondary education.
 - There is a gender imbalance, with more female applicants.
