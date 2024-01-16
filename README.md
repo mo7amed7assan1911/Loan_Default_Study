@@ -3,31 +3,34 @@
 ## Introduction
 
 🏦 **Business Overview:**
-The business revolves around providing financial assistance to individuals or businesses in the form of loans. When someone applies for a loan, they are requesting a specific amount of money to be lent to them for a defined purpose. The lending institution evaluates the applicant's creditworthiness, risk profile, and financial stability to make informed decisions about granting or denying the loan.
+The business revolves around providing financial assistance to individuals or businesses through loans.
+When someone applies for a loan, they are requesting a specific amount of money to be lent to them for a defined purpose.
+The lending institution evaluates the applicant's creditworthiness, risk profile, and financial stability to decide whether to grant or deny the loan.
 
 💼 **Problem Statement:**
-The problem is to predict whether an applicant who is approved for a loan will repay or default based on the applicant's information.
+The challenge is to predict whether an approved loan applicant will repay or default based on their provided information. Our objective is to develop a predictive model leveraging applicant data to enhance our ability to anticipate and manage potential risks associated with loan approvals. In particular, we place a strong emphasis on **optimizing the recall metric to effectively detect applicants more likely to default.**
 
 📊 **Dataset:**
-The dataset used for this project consists of two files: current application data and previous applications data. You can find it on Kaggle [here](https://www.kaggle.com/datasets/gauravduttakiit/loan-defaulter?select=application_data.csv).
+The dataset used for this project consists of two files: current application data and previous application data. You can find it on Kaggle [here](https://www.kaggle.com/datasets/gauravduttakiit/loan-defaulter?select=application_data.csv).
 
 🛠️ **Strategy of Using Both Datasets:**
 The previous dataset is used to extract aggregated information about the applicant's history. It is then merged with the current application data to create the final dataset for analysis.
 
 ## Project Phases
 
-🚀 **Phase 1: Aggregated Insights from Previous Applications**
-In this phase, we extracted key features for each current applicant who has a history in our databases. One of the critical features is `prev_status`, which indicates a combination of approval rate and rejection rate of previous loans. It is set to 1 for applicants who have an approval rate greater than a specified threshold.
+### 🚀 Phase 1: Data Assessing & Cleaning
 
-🔍 **Phase 2: In-depth Analysis of Current Applications**
-We conducted an in-depth analysis of the current application data, identifying and addressing issues such as missing values, data conversion, and handling imbalanced data.
+* Handling Missing Values:
+  * Utilized appropriate methods to address missing values, including imputation by median and mode.
+  * Imputed values of `occupation_type` column by grouping `organization_type & name_education_type` columns to enhance accuracy.
 
-📈 **Phase 3: Building a Predictive Model for Default Risk Assessment**
-We built a predictive model to assess the risk of loan default based on the insights gained from previous phases.
+* Categorical Data Transformation:
+  * Employed both one-hot encoding and label encoding to convert relevant string columns.
 
-## Questions for Analysis
+### 🔍 Phase 2: In-depth Analysis of Current Applications
+Conducted an in-depth analysis of the current application data, identifying and addressing issues such as missing values, data conversion, and handling imbalanced data.
 
-🔍 Our analysis aimed to answer several key questions, including:
+Our analysis aimed to answer several key questions, including:
 
 **Studying Client Demographics:**
 - How does age relate to loan approval?
@@ -38,7 +41,7 @@ We built a predictive model to assess the risk of loan default based on the insi
 - Is there an optimal day of the week or time of day for submitting loan requests for higher approval chances?
 - Which documents are most important for loan approval?
 
-## Key Findings
+ #### Key Findings
 
 📊 **Client Demographics:**
 ![image](https://github.com/mo7amed7assan1911/Loan_Default_Study/assets/55090589/292d3ad1-cc36-4206-ab3e-f6300783ffc9)
@@ -54,15 +57,23 @@ We built a predictive model to assess the risk of loan default based on the insi
 - Men have a higher default rate compared to women.
 - Higher education levels are associated with lower default rates.
 
-📄 **Document Importance:**
-- Most documents do not significantly impact loan approval or default rates.
-- Recommendations are to drop most document-related columns except for `dock_3` and `dock_6`.
-
 🎯 **Feature Importance:**
-- Top features from random forest include two of the three columns aggregated from previous applications.
+- Employed a trick by using a dummy feature to delete each feature that gets lower importance than it.
+- Used voting of 3 different models [Random Forest, Logistic Regression, SVM] to rank each feature\
+by importance then takes the mean importance per feature.
 
+![image](https://github.com/mo7amed7assan1911/Loan_Default_Study/assets/55090589/ab3054cc-9630-482f-95a5-769be78e0835)
+
+- Then select features with high importance and low VIF.
+![image](https://github.com/mo7amed7assan1911/Loan_Default_Study/assets/55090589/0202404e-48f4-4281-be2e-3b5fd6edf7de)
+
+### 📈 Phase 3: Building a Predictive Model for Default Risk Assessment
+- Used PCA to handel the Multicollinearity that still exists in the promissing features.
+- Fine tuned XGBoost model with the PCA components.
+- Built predictive **XGBoost Classifier** model on the original dataset with promising features to assess the risk of loan default based on the insights gained from previous phases.
+- Got our goal by getting 0.92 Recall & 0.74 AUC score.
 ## Conclusion
 
-🧾 This project involved a comprehensive analysis of loan application data, aiming to predict loan default risk. It utilized insights from client demographics, applicant information, and document importance. The final model was built on a selected set of promising features.
+🧾 This project involved a comprehensive analysis of loan application data, aiming to predict loan default risk. It utilized insights from client demographics, and applicant information. The final model was built on a selected set of promising features.
 
 ---
